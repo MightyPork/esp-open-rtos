@@ -21,9 +21,9 @@
  * @brief GPIO direction modes
  */
 typedef enum {
-	GPIO_INPUT,
-	GPIO_OUTPUT,         /**< "Standard" push-pull output */
-	GPIO_OUT_OPEN_DRAIN, /**< Open drain output */
+    GPIO_INPUT,
+    GPIO_OUTPUT,         /**< "Standard" push-pull output */
+    GPIO_OUT_OPEN_DRAIN, /**< Open drain output */
 } gpio_direction_t;
 
 
@@ -65,8 +65,8 @@ void gpio_set_pullup(uint8_t gpio_num, bool enabled, bool enabled_during_sleep);
  */
 static inline void gpio_disable(const uint8_t gpio_num)
 {
-	GPIO.ENABLE_OUT_CLEAR = BIT(gpio_num);
-	*gpio_iomux_reg(gpio_num) &= ~IOMUX_PIN_OUTPUT_ENABLE;
+    GPIO.ENABLE_OUT_CLEAR = BIT(gpio_num);
+    *gpio_iomux_reg(gpio_num) &= ~IOMUX_PIN_OUTPUT_ENABLE;
 }
 
 
@@ -86,11 +86,11 @@ static inline void gpio_disable(const uint8_t gpio_num)
  */
 static inline void gpio_set_output_on_sleep(const uint8_t gpio_num, bool enabled)
 {
-	if (enabled) {
-		IOMUX.PIN[gpio_to_iomux(gpio_num)] |= IOMUX_PIN_OUTPUT_ENABLE_SLEEP;
-	} else {
-		IOMUX.PIN[gpio_to_iomux(gpio_num)] &= ~IOMUX_PIN_OUTPUT_ENABLE_SLEEP;
-	}
+    if (enabled) {
+        IOMUX.PIN[gpio_to_iomux(gpio_num)] |= IOMUX_PIN_OUTPUT_ENABLE_SLEEP;
+    } else {
+        IOMUX.PIN[gpio_to_iomux(gpio_num)] &= ~IOMUX_PIN_OUTPUT_ENABLE_SLEEP;
+    }
 }
 
 
@@ -114,10 +114,10 @@ static inline void gpio_set_output_on_sleep(const uint8_t gpio_num, bool enabled
  */
 static inline void gpio_write(const uint8_t gpio_num, const bool set)
 {
-	if (set)
-		GPIO.OUT_SET = BIT(gpio_num);
-	else
-		GPIO.OUT_CLEAR = BIT(gpio_num);
+    if (set)
+        GPIO.OUT_SET = BIT(gpio_num);
+    else
+        GPIO.OUT_CLEAR = BIT(gpio_num);
 }
 
 
@@ -135,16 +135,16 @@ static inline void gpio_write(const uint8_t gpio_num, const bool set)
  */
 static inline void gpio_toggle(const uint8_t gpio_num)
 {
-	/* Why implement like this instead of GPIO_OUT_REG ^= xxx?
-	   Concurrency. If an interrupt or higher priority task writes to
-	   GPIO_OUT between reading and writing, only the gpio_num pin can
-	   get an invalid value. Prevents one task from clobbering another
-	   task's pins, without needing to disable/enable interrupts.
-	*/
-	if (GPIO.OUT & BIT(gpio_num))
-		GPIO.OUT_CLEAR = BIT(gpio_num);
-	else
-		GPIO.OUT_SET = BIT(gpio_num);
+    /* Why implement like this instead of GPIO_OUT_REG ^= xxx?
+       Concurrency. If an interrupt or higher priority task writes to
+       GPIO_OUT between reading and writing, only the gpio_num pin can
+       get an invalid value. Prevents one task from clobbering another
+       task's pins, without needing to disable/enable interrupts.
+    */
+    if (GPIO.OUT & BIT(gpio_num))
+        GPIO.OUT_CLEAR = BIT(gpio_num);
+    else
+        GPIO.OUT_SET = BIT(gpio_num);
 }
 
 
@@ -163,7 +163,7 @@ static inline void gpio_toggle(const uint8_t gpio_num)
  */
 static inline bool gpio_read(const uint8_t gpio_num)
 {
-	return GPIO.IN & BIT(gpio_num);
+    return GPIO.IN & BIT(gpio_num);
 }
 
 
@@ -182,11 +182,11 @@ extern void gpio_interrupt_handler(void);
  */
 static inline void gpio_set_interrupt(const uint8_t gpio_num, const gpio_inttype_t int_type)
 {
-	GPIO.CONF[gpio_num] = SET_FIELD(GPIO.CONF[gpio_num], GPIO_CONF_INTTYPE, int_type);
-	if (int_type != GPIO_INTTYPE_NONE) {
-		_xt_isr_attach(INUM_GPIO, gpio_interrupt_handler);
-		_xt_isr_unmask(1 << INUM_GPIO);
-	}
+    GPIO.CONF[gpio_num] = SET_FIELD(GPIO.CONF[gpio_num], GPIO_CONF_INTTYPE, int_type);
+    if (int_type != GPIO_INTTYPE_NONE) {
+        _xt_isr_attach(INUM_GPIO, gpio_interrupt_handler);
+        _xt_isr_unmask(1 << INUM_GPIO);
+    }
 }
 
 
@@ -197,7 +197,7 @@ static inline void gpio_set_interrupt(const uint8_t gpio_num, const gpio_inttype
  */
 static inline gpio_inttype_t gpio_get_interrupt(const uint8_t gpio_num)
 {
-	return (gpio_inttype_t)FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_num]);
+    return (gpio_inttype_t)FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_num]);
 }
 
 #endif
