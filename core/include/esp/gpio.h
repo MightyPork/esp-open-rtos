@@ -1,5 +1,5 @@
 /**
- * @file esp_iomux.h
+ * @file esp/gpio.h
  * @brief GPIO functions.
  *
  * Part of esp-open-rtos
