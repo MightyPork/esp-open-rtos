@@ -141,7 +141,7 @@ static inline void gpio_toggle(const uint8_t gpio_num)
 	   get an invalid value. Prevents one task from clobbering another
 	   task's pins, without needing to disable/enable interrupts.
 	*/
-	if(GPIO.OUT & BIT(gpio_num))
+	if (GPIO.OUT & BIT(gpio_num))
 		GPIO.OUT_CLEAR = BIT(gpio_num);
 	else
 		GPIO.OUT_SET = BIT(gpio_num);
@@ -183,9 +183,9 @@ extern void gpio_interrupt_handler(void);
 static inline void gpio_set_interrupt(const uint8_t gpio_num, const gpio_inttype_t int_type)
 {
 	GPIO.CONF[gpio_num] = SET_FIELD(GPIO.CONF[gpio_num], GPIO_CONF_INTTYPE, int_type);
-	if(int_type != GPIO_INTTYPE_NONE) {
+	if (int_type != GPIO_INTTYPE_NONE) {
 		_xt_isr_attach(INUM_GPIO, gpio_interrupt_handler);
-		_xt_isr_unmask(1<<INUM_GPIO);
+		_xt_isr_unmask(1 << INUM_GPIO);
 	}
 }
 
