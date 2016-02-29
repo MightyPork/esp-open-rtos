@@ -71,7 +71,7 @@ static inline void gpio_disable(const uint8_t gpio_num)
 
 
 /**
- * @brief gpio_set_output_on_sleep
+ * @brief Enable or disable GPIO output in sleep mode.
  *
  * Set whether the specified pin continues to drive its output when the ESP8266
  * goes into sleep mode. Note that this setting is reset to off whenever
